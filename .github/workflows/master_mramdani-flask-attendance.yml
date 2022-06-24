@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'mramdani-flask-attendance'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_222AD16F3BE84A2D966BCB98948D39B6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3DA5BE33409B4BB2B2C4FDFA9D5B94C9 }}

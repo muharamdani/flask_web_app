@@ -15,3 +15,7 @@ class Users(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    @staticmethod
+    def rollback():
+        db.session.rollback()

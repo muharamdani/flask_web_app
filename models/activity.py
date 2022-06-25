@@ -1,4 +1,6 @@
 from utils import db
+from models.attend import Attendance
+from werkzeug.exceptions import Forbidden
 
 
 class Activity(db.Model):
@@ -10,3 +12,21 @@ class Activity(db.Model):
 
     def __repr__(self):
         return f"<Activity {self.user}>"
+
+    @staticmethod
+    def allow_access(user_id):
+        attend = Attendance().is_checkin(user_id)
+        if not attend:
+            raise Forbidden("Please check in first")
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @classmethod
+    def get_by_id(cls, activity_id):
+        return cls.query.get_or_404(activity_id)

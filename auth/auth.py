@@ -13,22 +13,16 @@ from flask_jwt_extended import \
     get_jwt_identity
 
 auth_namespace = Namespace('auth', description='Api for Authentication')
-user_model = auth_namespace.model(
-    'Users', {
-        'id': fields.Integer(),
-        'username': fields.String(required=True, description="Username"),
-        'email': fields.String(required=True, description="Email"),
-        'password': fields.String(required=True, description="Password"),
-        'created_at': fields.DateTime()
-    }
-)
-#
-# login_model = auth_namespace.model(
-#     'Users', {
-#         'email': fields.String(required=True, description="Email"),
-#         'password': fields.String(required=True, description="Password"),
-#     }
-# )
+user_data = {
+    'id': fields.Integer(),
+    'username': fields.String(required=True, description="Username"),
+    'email': fields.String(required=True, description="Email"),
+    'password': fields.String(required=True, description="Password"),
+    'created_at': fields.DateTime()
+}
+user_model = auth_namespace.model('Users', user_data)
+user_data.pop('password')
+user_login_model = auth_namespace.model('Users', user_data)
 
 
 @auth_namespace.route('/login')
@@ -89,7 +83,7 @@ class RefreshToken(Resource):
 @auth_namespace.route('/profile')
 class GetProfile(Resource):
     @jwt_required()
-    @auth_namespace.marshal_with(user_model)
+    @auth_namespace.marshal_with(user_login_model)
     def get(self):
         identity = get_jwt_identity()
         user = Users.query.get_or_404(identity)
